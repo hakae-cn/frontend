@@ -1,0 +1,167 @@
+cache:
+  paths:
+    - node_modules/
+
+stages:
+  - pre_build
+  - build
+  - deploy
+
+pre_build:
+  before_script:
+    - echo "pre build before script"
+    - echo "$CHAT_CHANNEL"
+    - echo "$CHAT_INPUT"
+    - echo "$CHAT_USER_ID"
+    - echo "$CI"
+    - echo "$CI_API_V4_URL"
+    - echo "$CI_BUILDS_DIR"
+    - echo "$CI_COMMIT_AUTHOR"
+    - echo "$CI_COMMIT_BEFORE_SHA"
+    - echo "$CI_COMMIT_BRANCH"
+    - echo "$CI_COMMIT_DESCRIPTION"
+    - echo "$CI_COMMIT_MESSAGE"
+    - echo "$CI_COMMIT_REF_NAME"
+    - echo "$CI_COMMIT_REF_PROTECTED"
+    - echo "$CI_COMMIT_REF_SLUG"
+    - echo "$CI_COMMIT_SHA"
+    - echo "$CI_COMMIT_SHORT_SHA"
+    - echo "$CI_COMMIT_TAG"
+    - echo "$CI_COMMIT_TIMESTAMP"
+    - echo "$CI_COMMIT_TITLE"
+    - echo "$CI_CONCURRENT_ID"
+    - echo "$CI_CONCURRENT_PROJECT_ID"
+    - echo "$CI_CONFIG_PATH"
+    - echo "$CI_DEBUG_TRACE"
+    - echo "$CI_DEFAULT_BRANCH"
+    - echo "$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX"
+    - echo "$CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX"
+    - echo "$CI_DEPENDENCY_PROXY_PASSWORD"
+    - echo "$CI_DEPENDENCY_PROXY_SERVER"
+    - echo "$CI_DEPENDENCY_PROXY_USER"
+    - echo "$CI_DEPLOY_FREEZE"
+    - echo "$CI_DEPLOY_PASSWORD"
+    - echo "$CI_DEPLOY_USER"
+    - echo "$CI_DISPOSABLE_ENVIRONMENT"
+    - echo "$CI_ENVIRONMENT_NAME"
+    - echo "$CI_ENVIRONMENT_SLUG"
+    - echo "$CI_ENVIRONMENT_URL"
+    - echo "$CI_ENVIRONMENT_ACTION"
+    - echo "$CI_ENVIRONMENT_TIER"
+    - echo "$CI_HAS_OPEN_REQUIREMENTS"
+    - echo "$CI_JOB_ID"
+    - echo "$CI_JOB_IMAGE"
+    - echo "$CI_JOB_JWT"
+    - echo "$CI_JOB_JWT_V1"
+    - echo "$CI_JOB_JWT_V2"
+    - echo "$CI_JOB_MANUAL"
+    - echo "$CI_JOB_NAME"
+    - echo "$CI_JOB_STAGE"
+    - echo "$CI_JOB_STATUS"
+    - echo "$CI_JOB_TOKEN"
+    - echo "$CI_JOB_STARTED_AT"
+    - echo "$CI_KUBERNETES_ACTIVE"
+    - echo "$CI_NODE_INDEX"
+    - echo "$CI_NODE_TOTAL"
+    - echo "$CI_OPEN_MERGE_REQUESTS"
+    - echo "$CI_PAGES_DOMAIN"
+    - echo "$CI_PAGES_URL"
+    - echo "$CI_PIPELINE_ID"
+    - echo "$CI_PIPELINE_IID"
+    - echo "$CI_PIPELINE_SOURCE"
+    - echo "$CI_PIPELINE_TRIGGERED"
+    - echo "$CI_PIPELINE_URL"
+    - echo "$CI_PIPELINE_CREATED_AT"
+    - echo "$CI_PROJECT_CONFIG_PATH"
+    - echo "$CI_PROJECT_DIR"
+    - echo "$CI_PROJECT_ID"
+    - echo "$CI_PROJECT_NAME"
+    - echo "$CI_PROJECT_NAMESPACE"
+    - echo "$CI_PROJECT_PATH_SLUG"
+    - echo "$CI_PROJECT_PATH"
+    - echo "$CI_PROJECT_REPOSITORY_LANGUAGES"
+    - echo "$CI_PROJECT_ROOT_NAMESPACE"
+    - echo "$CI_PROJECT_TITLE"
+    - echo "$CI_PROJECT_URL"
+    - echo "$CI_PROJECT_VISIBILITY"
+    - echo "$CI_PROJECT_CLASSIFICATION_LABEL"
+    - echo "$CI_REGISTRY_IMAGE"
+    - echo "$CI_REGISTRY_PASSWORD"
+    - echo "$CI_REGISTRY_USER"
+    - echo "$CI_REGISTRY"
+    - echo "$CI_REPOSITORY_URL"
+    - echo "$CI_RUNNER_DESCRIPTION"
+    - echo "$CI_RUNNER_EXECUTABLE_ARCH"
+    - echo "$CI_RUNNER_ID"
+    - echo "$CI_RUNNER_REVISION"
+    - echo "$CI_RUNNER_SHORT_TOKEN"
+    - echo "$CI_RUNNER_TAGS"
+    - echo "$CI_RUNNER_VERSION"
+    - echo "$CI_SERVER_HOST"
+    - echo "$CI_SERVER_NAME"
+    - echo "$CI_SERVER_PORT"
+    - echo "$CI_SERVER_PROTOCOL"
+    - echo "$CI_SERVER_REVISION"
+    - echo "$CI_SERVER_URL"
+    - echo "$CI_SERVER_VERSION_MAJOR"
+    - echo "$CI_SERVER_VERSION_MINOR"
+    - echo "$CI_SERVER_VERSION_PATCH"
+    - echo "$CI_SERVER_VERSION"
+    - echo "$CI_SERVER"
+    - echo "$CI_SHARED_ENVIRONMENT"
+    - echo "$GITLAB_CI"
+    - echo "$GITLAB_FEATURES"
+    - echo "$GITLAB_USER_EMAIL"
+    - echo "$GITLAB_USER_ID"
+    - echo "$GITLAB_USER_LOGIN"
+    - echo "$GITLAB_USER_NAME"
+    - echo "$TRIGGER_PAYLOAD"
+  stage: pre_build
+  script:
+    - echo "npm install"
+    - npm install
+  only:
+    changes:
+      - package.json
+      - package-lock.json
+    refs:
+      - master
+      - test
+
+build:
+  before_script:
+    - echo "build before script"
+  stage: build
+  script:
+    - echo "build script"
+    - npm run build
+  only:
+    changes:
+      - src/**/*
+    refs:
+      - master
+      - test
+
+deploy-test:
+  stage: deploy
+  # environment:
+  #   name: test
+  script:
+    - echo "This job deploys something from the $CI_COMMIT_BRANCH branch."
+  only:
+    changes:
+      - dist/**/*
+    refs:
+      - test
+
+deploy-prod:
+  stage: deploy
+  # environment:
+  #   name: online
+  script:
+    - echo "This job deploys something from the $CI_COMMIT_BRANCH branch."
+  only:
+    changes:
+      - dist/**/*
+    refs:
+      - master
